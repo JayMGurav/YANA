@@ -1,9 +1,8 @@
 import redis from '../../lib/redis'
 
 export default async function upvote(req, res) {
-  const features = (await redis.hvals('features'))
+  const notes = (await redis.hvals('notes'))
     .map((entry) => JSON.parse(entry))
-    .sort((a, b) => b.score - a.score)
 
-  res.status(200).json({ features })
+  res.status(200).json({ notes })
 }

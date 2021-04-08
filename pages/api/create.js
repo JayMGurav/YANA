@@ -3,29 +3,28 @@ import { v4 as uuidv4 } from 'uuid'
 import redis from '../../lib/redis'
 
 export default async function upvote(req, res) {
-  const { title } = req.body
+  const { note, color } = req.body
 
-  if (!title) {
+  if (!note) {
     res.status(400).json({
-      error: 'Feature can not be empty',
+      error: 'Note can not be empty',
     })
-  } else if (title.length < 150) {
+  } else if (note.length < 200) {
     const id = uuidv4()
     const newEntry = {
       id,
-      title,
+      note,
+      color,
       created_at: Date.now(),
-      score: 1,
-      ip: 'NA',
     }
 
-    await redis.hset('features', id, JSON.stringify(newEntry))
+    await redis.hset('notes', id, JSON.stringify(newEntry))
     res.status(200).json({
       body: 'success',
     })
   } else {
     res.status(400).json({
-      error: 'Max 150 characters please.',
+      error: 'Max 200 characters please.',
     })
   }
 }
