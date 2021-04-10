@@ -1,11 +1,11 @@
 import { Machine } from 'xstate';
 
-type ToggleEvent = {
-  type: 'TOGGLE'
-}
+// type ToggleEvent = {
+//   type: 'TOGGLE'
+// }
 
 // State Machine
-export const toggleMachine = Machine<ToggleEvent>({
+export const toggleMachine = Machine({
   id: 'toggeButton',
   initial: 'idle',
   states: {

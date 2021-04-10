@@ -1,22 +1,31 @@
 import { useInterpret } from '@xstate/react';
-import { useEffect, useRef } from 'react';
-import { toggleMachine } from '../state/toggle';
+import { useEffect, useRef, useState } from 'react';
+import { toggleMachine } from '../state/addBtnToggleMachine';
 import anime from 'animejs';
 
 export default function Navbar() {
   const addButtonRef = useRef(null);
-  // const [disabled, setDisable] = useState(false);
+  const [disabled, setDisabled] = useState(false)
   
   useEffect(()=>{
     toggleService.onTransition((state) => {
+     
       animate(state.value);
     })
   },[]);
   
 
-  function animate(status: any){
+  const btnDisable = (btnStatus) => {
+    if(btnStatus){
+      setDisabled(true)
+    } else{
+      setDisabled(false)
+    }
+  }
+
+
+  function animate(status){
     const timeLine = anime.timeline();
-    // disableButton(true);
     if(status === 'active'){
       timeLine.add({
         targets: addButtonRef.current,
@@ -24,19 +33,22 @@ export default function Navbar() {
         scale: [1,0.85,1],
         rotate: 316,
         duration: 600,
-        easing: 'easeInOutSine'
+        easing: 'easeInOutSine',
+        begin: function() {
+           btnDisable(true);
+        },
       })
       .add({
         targets: '.note-selectors .first',
         translateY: [0,80],
         scaleY: [1.8,1],
-        duration: 3200,
+        duration: 2000,
       },
        "-=400"
       )
       .add({
           targets: '.note-selectors .other',
-          translateY: function (el:any) {
+          translateY: function (el) {
             return [el.getAttribute('data-from'),el.getAttribute('data-to')]
           },
           scaleY: [0,1],
@@ -45,21 +57,24 @@ export default function Navbar() {
             value: 1,
             duration: 10,
           },
-          delay: anime.stagger(240),
+          delay: anime.stagger(220),
           complete: function () {
-            // disableButton(false);
+            btnDisable(false);
           }
-      }, "-=2600");
+      }, "-=1600");
     }else if(status === 'inactive'){
       timeLine.add({
         targets: addButtonRef.current,
         rotate: 0,
         duration: 600,
-        easing: 'easeInOutSine'
+        easing: 'easeInOutSine',
+        begin: function() {
+          btnDisable(true);
+       },
       })
       .add({
         targets: '.note-selectors .selector',
-        translateY: function (el:any) {
+        translateY: function (el) {
           return [el.getAttribute('data-to'), 0]
         },
         duration: 400,
@@ -72,14 +87,15 @@ export default function Navbar() {
         translateY: [0,-12,0],
         scale: [1,0.85,1],
         duration: 600,
-        easing: 'easeInOutSine'
+        easing: 'easeInOutSine',
+        complete: function () {
+          btnDisable(false);
+        }
       },"-=400")
     }
   }
-
-
-
   const toggleService = useInterpret(toggleMachine);
+
   const toggle = () => {
     toggleService.send('TOGGLE')
   }
@@ -91,7 +107,7 @@ export default function Navbar() {
           </div>
           <div className="notes-container">
             <div className="add-button">
-              <button id="addNote" onClick={toggle} ref={addButtonRef}>
+              <button id="addNote" onClick={toggle} ref={addButtonRef} disabled={disabled}>
                 <img src="./plus.svg" alt="Plus Icon" />
               </button>
             </div>

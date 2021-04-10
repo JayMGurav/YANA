@@ -1,4 +1,9 @@
+import { useRef } from "react"
+import Modal from './Modal';
+
+
 export default function Notes() {
+  const modalRef = useRef(null);  
   return(
     <main className="main">
       <div className="header">
@@ -21,6 +26,11 @@ export default function Notes() {
           </div>
         </div>
       </div>
+      <button onClick={() => modalRef.current.open()}>open</button>
+      <Modal modalRef={modalRef}>
+        <button onClick={() => modalRef.current.close()}>close</button>
+        <h1>Modal</h1>
+      </Modal>
     </main>
   )
 }

@@ -8,7 +8,7 @@ export default function Home() {
   return (
     <div>
       <Head>
-        <title>📝 YANA</title>
+        <title>YANA</title>
       </Head>
       <div className="grid">
         <Navbar/>
