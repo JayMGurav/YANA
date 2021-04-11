@@ -11,8 +11,7 @@ export default function Navbar() {
   const [disabled, setDisabled] = useState(false)
   
   useEffect(()=>{
-    toggleService.onTransition((state) => {
-     
+    toggleService.onTransition((state) => {     
       animate(state.value);
     })
   },[]);
@@ -32,20 +31,20 @@ export default function Navbar() {
     if(status === 'active'){
       timeLine.add({
         targets: addButtonRef.current,
-        translateY: [0,-12,0],
-        scale: [1,0.85,1],
+        translateY: [0, -12, 0],
+        scale: [1, 0.85, 1],
         rotate: 316,
         duration: 600,
-        easing: 'easeInOutSine',
+        easing: "easeInOutSine",
         begin: function() {
            btnDisable(true);
         },
       })
       .add({
         targets: '.note-selectors .first',
-        translateY: [0,80],
-        scaleY: [1.8,1],
-        duration: 2000,
+        translateY: [0, 80],
+        duration: 3200,
+        scaleY: [1.8, 1],
       },
        "-=400"
       )
@@ -54,17 +53,18 @@ export default function Navbar() {
           translateY: function (el) {
             return [el.getAttribute('data-from'),el.getAttribute('data-to')]
           },
-          scaleY: [0,1],
+          scaleY: [0, 1],
           duration: 1600,
-          opacity:{
+          opacity: {
             value: 1,
             duration: 10,
           },
-          delay: anime.stagger(220),
+          delay: anime.stagger(240),
           complete: function () {
             btnDisable(false);
           }
-      }, "-=1600");
+      },  "-=2600");
+
     }else if(status === 'inactive'){
       timeLine.add({
         targets: addButtonRef.current,
@@ -159,9 +159,9 @@ export default function Navbar() {
               </filter>
               </defs>
             </svg>
-            <Modal modalRef={modalRef}>
-              <h1>Modal</h1>
-            </Modal>
+            <Modal modalRef={modalRef} />
+              {/* <h1>Modal</h1> */}
+            {/* </Modal> */}
         </div>
   )
 }

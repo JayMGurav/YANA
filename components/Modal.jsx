@@ -2,6 +2,8 @@
 import { useEffect, useImperativeHandle, useState, useCallback } from 'react';
 import {createPortal} from 'react-dom';
 
+
+
 export default function Modal({children, modalRef}) {
   const [mountpoint, setMountpoint] = useState();
   const [isOpen, setIsOpen] = useState(false);
@@ -22,6 +24,8 @@ export default function Modal({children, modalRef}) {
     setMountpoint(mountpoint);
     return () => void document.body.removeChild(mountpoint);
   }, []);
+
+
 
   const handleEscape = useCallback(event => {
     if (event.keyCode === 27) close()
@@ -44,7 +48,16 @@ export default function Modal({children, modalRef}) {
             <button id="close-btn"  onClick={close}>
               <img src="./plus.svg" alt="Close Icon" />
             </button>
-            {children}
+            {/* {children} */}
+            <div id="note-body">
+              <div  
+                contentEditable="true" 
+                className="note-textarea"
+              >
+              The beginning of screenless design: jobs to be take over by Solution Architect
+              </div>
+          </div>
+          <button>Add note</button>
           </div>
         </div>
       </>

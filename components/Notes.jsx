@@ -2,7 +2,6 @@ import { useRef } from "react"
 
 
 export default function Notes() {
-  const modalRef = useRef(null);  
   return(
     <main className="main">
       <div className="header">
@@ -11,6 +10,7 @@ export default function Notes() {
       <div className="notes">
         <div className="note">
           <textarea
+            className="note-textarea"
             placeholder="The beginning of screenless design: jobs to be take over by Solution Architect"
           ></textarea>
           <div className="footer">
@@ -25,10 +25,6 @@ export default function Notes() {
           </div>
         </div>
       </div>
-      {/* <button onClick={() => modalRef.current.open({color:"red"})}>open</button>
-      <Modal modalRef={modalRef}>
-        <h1>Modal</h1>
-      </Modal> */}
     </main>
   )
 }
