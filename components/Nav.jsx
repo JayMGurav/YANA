@@ -2,9 +2,12 @@ import { useInterpret } from '@xstate/react';
 import { useEffect, useRef, useState } from 'react';
 import { toggleMachine } from '../state/addBtnToggleMachine';
 import anime from 'animejs';
+import Modal from './Modal';
 
 export default function Navbar() {
   const addButtonRef = useRef(null);
+  const modalRef = useRef(null);  
+
   const [disabled, setDisabled] = useState(false)
   
   useEffect(()=>{
@@ -114,18 +117,23 @@ export default function Navbar() {
             <div className="note-selectors">
               <div className="selector first"
                 data-from="0" data-to="80"
+                onClick={() => modalRef.current.open({color:"#ffcf7d"})}
               ></div>
               <div className="selector second other"
                 data-from="100" data-to="140"
+                onClick={() => modalRef.current.open({color:"#f0a177"})}
               ></div>
               <div className="selector third other"
                 data-from="160" data-to="200"
+                onClick={() => modalRef.current.open({color:"#b095f6"})}
               ></div>
               <div className="selector fourth other"
                 data-from="220" data-to="260"
+                onClick={() => modalRef.current.open({color:"#55cffa"})}
               ></div>
               <div className="selector fifth other"
                 data-from="280" data-to="320"
+                onClick={() => modalRef.current.open({color:"#e6ee96"})}
               ></div>
             </div>
           </div>
@@ -151,6 +159,9 @@ export default function Navbar() {
               </filter>
               </defs>
             </svg>
+            <Modal modalRef={modalRef}>
+              <h1>Modal</h1>
+            </Modal>
         </div>
   )
 }
