@@ -1,6 +1,7 @@
 // modalRoot
 import { useEffect, useImperativeHandle, useState, useCallback, useRef } from 'react';
 import {createPortal} from 'react-dom';
+import { mutate } from 'swr'
 
 
 
@@ -9,40 +10,65 @@ export default function Modal({modalRef}) {
   const [mountpoint, setMountpoint] = useState();
   const [isOpen, setIsOpen] = useState(false);
   const [modalColor, setModalColor]  = useState(null);
+  const [isCreateLoading, setCreateLoading] = useState(false)
 
-  const open = useCallback((data) => {
-    setModalColor(data)
-    setIsOpen(true)
-  }, [])
-
-  const close = useCallback(() => {
-    setModalColor(null);
-    setIsOpen(false);
-  }, [])
-
+  
   useEffect(() => {
     const mountpoint = document.createElement("div");
     document.body.appendChild(mountpoint);
     setMountpoint(mountpoint);
     return () => void document.body.removeChild(mountpoint);
   }, []);
+  
+  const open = useCallback((data) => {
+    setModalColor(data)
+    setIsOpen(true)
+  }, [])
 
-
-
-  const handleEscape = useCallback(event => {
-    if (event.keyCode === 27) close()
-  }, [close])
+  const close = useCallback(() => {
+    setIsOpen(false);
+  }, [])
 
   useImperativeHandle(modalRef, () => ({
     open,
     close
   }),[])
 
-  const handleSubmit = (e) => {
+  const handleEscape = useCallback(event => {
+    if (event.keyCode === 27) close()
+  }, [close])
+
+
+  async function handleSubmit(e) {
     e.preventDefault();
-    console.log(modalDataRef.current.value);
-    modalDataRef.current.value = ""
-    close()
+    setCreateLoading(true);
+
+    const res = await fetch('/api/create', {
+      body: JSON.stringify({
+        note: modalDataRef.current.value,
+        color: modalColor.color
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+    });
+
+    const { error } = await res.json();
+    setCreateLoading(false);
+
+    if (error) {
+      // toast.error(error)
+      console.log({ error });
+      return;
+    }
+
+    mutate('/api/notes');
+    modalDataRef.current.value = '';
+    close();
+    setModalColor(null);
+
+
   }
 
   return mountpoint ? createPortal(
@@ -75,7 +101,7 @@ export default function Modal({modalRef}) {
                 background:"#000",
                 color:"#fff"
               }}
-            >ADD</button>
+            >  {isCreateLoading ? 'Loading...' : 'ADD'}</button>
           </form>
         </div>
       </div>
