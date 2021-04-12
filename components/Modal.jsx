@@ -1,10 +1,11 @@
 // modalRoot
-import { useEffect, useImperativeHandle, useState, useCallback } from 'react';
+import { useEffect, useImperativeHandle, useState, useCallback, useRef } from 'react';
 import {createPortal} from 'react-dom';
 
 
 
-export default function Modal({children, modalRef}) {
+export default function Modal({modalRef}) {
+  const modalDataRef = useRef('');
   const [mountpoint, setMountpoint] = useState();
   const [isOpen, setIsOpen] = useState(false);
   const [modalColor, setModalColor]  = useState(null);
@@ -13,6 +14,7 @@ export default function Modal({children, modalRef}) {
     setModalColor(data)
     setIsOpen(true)
   }, [])
+
   const close = useCallback(() => {
     setModalColor(null);
     setIsOpen(false);
@@ -36,31 +38,47 @@ export default function Modal({children, modalRef}) {
     close
   }),[])
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(modalDataRef.current.value);
+    modalDataRef.current.value = ""
+    close()
+  }
 
   return mountpoint ? createPortal(
     isOpen ? (
-      <>
-        <div className="modal-overlay" onClick={close} />
-        <div className="modal-body" 
+      <div id="modal">
+        <div 
+          id="modal-overlay" 
+          onClick={close} 
+        />
+        <div 
+          id="modal-body" 
           style={{background: modalColor.color}}
         >
-          <div className="modal-content">
-            <button id="close-btn"  onClick={close}>
+          <div className="flex-spacebetween">
+            <h3 style={{margin: 0}}>ANOTHER NOTE?</h3>
+            <button className="close-btn"  onClick={close}>
               <img src="./plus.svg" alt="Close Icon" />
             </button>
-            {/* {children} */}
-            <div id="note-body">
-              <div  
-                contentEditable="true" 
-                className="note-textarea"
-              >
-              The beginning of screenless design: jobs to be take over by Solution Architect
-              </div>
           </div>
-          <button>Add note</button>
-          </div>
+          <form onSubmit={handleSubmit}>
+            <textarea
+              ref={modalDataRef} 
+              id="modal-notearea"
+              placeholder="Go ahead make another note, start entering your note right here."
+            />
+            <button 
+              className="pushable"
+              type="submit"
+              style={{
+                background:"#000",
+                color:"#fff"
+              }}
+            >ADD</button>
+          </form>
         </div>
-      </>
+      </div>
     ) : null,
     mountpoint
   ) : null;

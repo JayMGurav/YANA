@@ -160,8 +160,6 @@ export default function Navbar() {
               </defs>
             </svg>
             <Modal modalRef={modalRef} />
-              {/* <h1>Modal</h1> */}
-            {/* </Modal> */}
         </div>
   )
 }
