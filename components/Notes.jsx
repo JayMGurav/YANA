@@ -5,7 +5,7 @@ export default function Notes({notes}) {
     <main className="main">
      {notes.length === 0 ? (
        <div className="empty_notelist">
-          <h1 style={{margin:0}}>No notes available yet!!</h1>
+          <h1 style={{margin:0}}>No notes available!!</h1>
           <h4 style={{margin:0}}>Go ahead add a note to ponder🚀</h4>
        </div>
      ) : (

@@ -21,6 +21,7 @@ export default async function createNote(req, res) {
     await redis.hset('notes', id, JSON.stringify(newEntry))
     res.status(200).json({
       body: 'success',
+      data: newEntry
     })
 
 

@@ -54,7 +54,7 @@ export default function Modal({modalRef}) {
       method: 'POST',
     });
 
-    const { error } = await res.json();
+    const { error, data } = await res.json();
     setCreateLoading(false);
 
     if (error) {
@@ -63,12 +63,16 @@ export default function Modal({modalRef}) {
       return;
     }
 
-    mutate('/api/notes');
+    mutate('/api/notes', async (notes) =>  {
+     if(notes === undefined){
+       return {notes: [data]}
+     }else {
+        return { notes: [...notes.notes, data] }
+     }
+    } ,true);
     modalDataRef.current.value = '';
     close();
     setModalColor(null);
-
-
   }
 
   return mountpoint ? createPortal(
